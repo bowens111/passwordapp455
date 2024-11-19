@@ -1,0 +1,4 @@
+passwordapp\PasswordStrengthChecker.class
+module-info.class
+passwordapp\App.class
+passwordapp\PasswordManager.class
