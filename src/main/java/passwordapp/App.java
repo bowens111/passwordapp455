@@ -2,9 +2,11 @@ package passwordapp;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.crypto.SecretKey;
@@ -55,6 +57,36 @@ public class App extends Application {
             Button retrievePasswordButton = new Button("Retrieve Password");
             Label retrievedPasswordLabel = new Label();
 
+            // Help Button for Pop-up Instructions
+            Button helpButton = new Button("Help");
+            helpButton.setStyle("-fx-background-color: #444; -fx-text-fill: white;");
+
+            // Add all elements to the root layout
+            root.getChildren().addAll(
+                titleLabel,
+                new Label("Password Strength Analyzer"),
+                passwordField,
+                checkStrengthButton,
+                strengthLabel,
+                new Label("Password Generator"),
+                passwordLengthField,
+                generatePasswordButton,
+                generatedPasswordLabel,
+                new Label("Password Manager"),
+                accountField,
+                newPasswordField,
+                savePasswordButton,
+                saveStatusLabel,
+                retrievePasswordButton,
+                retrievedPasswordLabel
+            );
+
+            // Bottom-right alignment for the Help button
+            HBox helpBox = new HBox(helpButton);
+            helpBox.setAlignment(Pos.BOTTOM_RIGHT);
+            helpBox.setPadding(new Insets(10));
+            root.getChildren().add(helpBox);
+
             // Event Handlers
             checkStrengthButton.setOnAction(event -> {
                 String password = passwordField.getText();
@@ -77,19 +109,19 @@ public class App extends Application {
             savePasswordButton.setOnAction(event -> {
                 String account = accountField.getText();
                 String password = newPasswordField.getText();
-            
+
                 if (account.isEmpty() || password.isEmpty()) {
-                    saveStatusLabel.setText("Account and password fields cannot be empty.");
+                    saveStatusLabel.setText("Account and password cannot be empty.");
                     return;
                 }
-            
+
                 // Check password strength before saving
                 String strength = PasswordStrengthChecker.checkStrength(password);
                 if (!"Very Strong".equalsIgnoreCase(strength)) {
                     saveStatusLabel.setText("Password must be 'Very Strong' to save.");
                     return;
                 }
-            
+
                 try {
                     passwordManager.addPassword(account, password);
                     saveStatusLabel.setText("Password saved successfully!");
@@ -97,13 +129,12 @@ public class App extends Application {
                     saveStatusLabel.setText("Error saving password: " + e.getMessage());
                 }
             });
-            
 
             retrievePasswordButton.setOnAction(event -> {
                 String account = accountField.getText();
 
                 if (account.isEmpty()) {
-                    retrievedPasswordLabel.setText("Account field cannot be empty.");
+                    retrievedPasswordLabel.setText("Account cannot be empty.");
                     return;
                 }
 
@@ -119,25 +150,7 @@ public class App extends Application {
                 }
             });
 
-            // Add elements to the layout
-            root.getChildren().addAll(
-                titleLabel,
-                new Label("Password Strength Analyzer"),
-                passwordField,
-                checkStrengthButton,
-                strengthLabel,
-                new Label("Password Generator"),
-                passwordLengthField,
-                generatePasswordButton,
-                generatedPasswordLabel,
-                new Label("Password Manager"),
-                accountField,
-                newPasswordField,
-                savePasswordButton,
-                saveStatusLabel,
-                retrievePasswordButton,
-                retrievedPasswordLabel
-            );
+            helpButton.setOnAction(event -> showHelpWindow(primaryStage));
 
             // Set the scene
             Scene scene = new Scene(root, 500, 600);
@@ -148,6 +161,36 @@ public class App extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Method to display the pop-up window
+    private void showHelpWindow(Stage parentStage) {
+        Stage helpStage = new Stage();
+        helpStage.initModality(Modality.APPLICATION_MODAL);
+        helpStage.initOwner(parentStage);
+        helpStage.setTitle("Help - Instructions");
+
+        VBox helpRoot = new VBox(10);
+        helpRoot.setPadding(new Insets(20));
+        helpRoot.setStyle("-fx-background-color: #333; -fx-text-fill: white;");
+
+        Label instructions = new Label("Instructions for using the tool:\n\n" +
+                "1. Enter a password to check its strength.\n" +
+                "2. Specify a length to generate a secure password.\n" +
+                "3. Save and retrieve passwords for different accounts.\n" +
+                "4. Ensure passwords are 'Very Strong' before saving.\n\n" +
+                "For more information, contact support.");
+        instructions.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(event -> helpStage.close());
+
+        helpRoot.getChildren().addAll(instructions, closeButton);
+        helpRoot.setAlignment(Pos.CENTER);
+
+        Scene helpScene = new Scene(helpRoot, 400, 300);
+        helpStage.setScene(helpScene);
+        helpStage.show();
     }
 
     public static void main(String[] args) {
