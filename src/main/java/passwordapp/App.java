@@ -77,12 +77,19 @@ public class App extends Application {
             savePasswordButton.setOnAction(event -> {
                 String account = accountField.getText();
                 String password = newPasswordField.getText();
-
+            
                 if (account.isEmpty() || password.isEmpty()) {
-                    saveStatusLabel.setText("Account and password cannot be empty.");
+                    saveStatusLabel.setText("Account and password fields cannot be empty.");
                     return;
                 }
-
+            
+                // Check password strength before saving
+                String strength = PasswordStrengthChecker.checkStrength(password);
+                if (!"Very Strong".equalsIgnoreCase(strength)) {
+                    saveStatusLabel.setText("Password must be 'Very Strong' to save.");
+                    return;
+                }
+            
                 try {
                     passwordManager.addPassword(account, password);
                     saveStatusLabel.setText("Password saved successfully!");
@@ -90,12 +97,13 @@ public class App extends Application {
                     saveStatusLabel.setText("Error saving password: " + e.getMessage());
                 }
             });
+            
 
             retrievePasswordButton.setOnAction(event -> {
                 String account = accountField.getText();
 
                 if (account.isEmpty()) {
-                    retrievedPasswordLabel.setText("Account cannot be empty.");
+                    retrievedPasswordLabel.setText("Account field cannot be empty.");
                     return;
                 }
 
