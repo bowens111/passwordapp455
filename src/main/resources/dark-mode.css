@@ -1,0 +1,79 @@
+/* Root background for dark mode */
+.root {
+    -webkit-background-color: #121212; /* For Safari and older WebKit browsers */
+    -moz-background-color: #121212;    /* For older Firefox versions */
+    -ms-background-color: #121212;     /* For older Microsoft browsers */
+    background-color: #121212;         /* Standard property */
+    -fx-background-color: #121212;     /* JavaFX-specific property */
+    -o-background-color: #121212;      /* For older Opera browsers */
+    -fx-text-fill: #ffffff;            /* Text color */
+}
+
+/* Labels in dark mode */
+.label {
+    -webkit-text-fill-color: #ffffff; /* For WebKit browsers */
+    -moz-text-fill-color: #ffffff;    /* For older Firefox versions */
+    -fx-text-fill: #ffffff;           /* JavaFX-specific property */
+}
+
+/* Buttons in dark mode */
+.button {
+    -webkit-background-color: #333333;
+    -moz-background-color: #333333;
+    -ms-background-color: #333333;
+    background-color: #333333;
+    -fx-background-color: #333333;
+    -o-background-color: #333333;
+
+    -webkit-text-fill-color: #ffffff;
+    -moz-text-fill-color: #ffffff;
+    -fx-text-fill: #ffffff;
+
+    -webkit-border-color: #555555;
+    -moz-border-color: #555555;
+    -ms-border-color: #555555;
+    border-color: #555555;
+    -fx-border-color: #555555;
+    -o-border-color: #555555;
+}
+
+/* Text fields and password fields */
+.text-field, .password-field {
+    -webkit-background-color: #333333;
+    -moz-background-color: #333333;
+    -ms-background-color: #333333;
+    background-color: #333333;
+    -fx-background-color: #333333;
+    -o-background-color: #333333;
+
+    -webkit-text-fill-color: #ffffff;
+    -moz-text-fill-color: #ffffff;
+    -fx-text-fill: #ffffff;
+
+    -webkit-border-color: #555555;
+    -moz-border-color: #555555;
+    -ms-border-color: #555555;
+    border-color: #555555;
+    -fx-border-color: #555555;
+    -o-border-color: #555555;
+
+    -webkit-prompt-text-fill: #aaaaaa;
+    -moz-prompt-text-fill: #aaaaaa;
+    -ms-prompt-text-fill: #aaaaaa;
+    -fx-prompt-text-fill: #aaaaaa;
+    -o-prompt-text-fill: #aaaaaa;
+}
+
+/* Table view in dark mode */
+.table-view {
+    -webkit-background-color: #1e1e1e;
+    -moz-background-color: #1e1e1e;
+    -ms-background-color: #1e1e1e;
+    background-color: #1e1e1e;
+    -fx-background-color: #1e1e1e;
+    -o-background-color: #1e1e1e;
+
+    -webkit-text-fill-color: #ffffff;
+    -moz-text-fill-color: #ffffff;
+    -fx-text-fill: #ffffff;
+}

@@ -91,11 +91,20 @@ public class App extends Application {
 
         // Sections for different functionalities
         VBox strengthAnalyzerSection = createLabeledSection("Password Strength Analyzer",
+            new Label("Enter a Password you wish to test: "),
             createPasswordStrengthControls());
         VBox passwordGeneratorSection = createLabeledSection("Password Generator",
+            new Label("Enter desired length for Password: "),
             createPasswordGeneratorControls());
         VBox passwordManagerSection = createLabeledSection("Password Manager",
+            new Label("Enter a Username and Password to be saved: "),
             createPasswordManagerControls());
+
+        CheckBox darkModeToggle = new CheckBox("Enable Dark Mode");
+            darkModeToggle.setOnAction(event -> {
+                boolean enableDarkMode = darkModeToggle.isSelected();
+                toggleDarkMode(root.getScene(), enableDarkMode);
+            });
 
         // New button to view hashed passwords
         Button viewHashedPasswordsButton = new Button("View Hashed Passwords");
@@ -113,10 +122,23 @@ public class App extends Application {
             strengthAnalyzerSection,
             passwordGeneratorSection,
             passwordManagerSection,
+            darkModeToggle,
             viewPasswordsSection
         );
 
         return new Scene(root, 600, 600);
+    }
+
+    private void toggleDarkMode(Scene scene, boolean enableDarkMode) {
+        String darkModeStylesheet = getClass().getResource("/dark-mode.css").toExternalForm();
+        
+        if (enableDarkMode) {
+            if (!scene.getStylesheets().contains(darkModeStylesheet)) {
+                scene.getStylesheets().add(darkModeStylesheet);
+            }
+        } else {
+            scene.getStylesheets().remove(darkModeStylesheet);
+        }
     }
 
     /** Creates the scene for verifying the master password before viewing hashed passwords */
@@ -199,7 +221,7 @@ public class App extends Application {
     /** Creates controls for the password strength analyzer section */
     private VBox createPasswordStrengthControls() {
         TextField passwordField = new TextField();
-        passwordField.setPromptText("Enter your password");
+        passwordField.setPromptText("Enter your password to test it's strength");
 
         Button checkStrengthButton = new Button("Check Strength");
         Label strengthLabel = new Label();
@@ -297,8 +319,9 @@ public class App extends Application {
             verifyPasswordField, verifyPasswordButton, verifyStatusLabel);
     }
 
-    /** Creates a labeled section with a title and a VBox of controls */
-    private VBox createLabeledSection(String title, VBox controls) {
+    /** Creates a labeled section with a title and a VBox of controls 
+         * @param label */
+        private VBox createLabeledSection(String title, Label label, VBox controls) {
         Label sectionTitle = new Label(title);
         sectionTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         VBox section = new VBox(10);
