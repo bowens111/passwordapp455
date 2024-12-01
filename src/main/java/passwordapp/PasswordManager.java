@@ -1,6 +1,7 @@
 package passwordapp;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,15 @@ public class PasswordManager {
         }
         return Argon2Utils.verifyPassword(password, storedHash);
     }
+
+    /**
+    * Retrieve all entries from the password store.
+    * Returns a list of account and hashed password pairs.
+    */
+    public List<Map.Entry<String, String>> getPasswordStoreEntries() {
+        return new ArrayList<>(passwordStore.entrySet());
+    }
+
 
     /**
      * Check if an account exists in the password store.
