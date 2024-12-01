@@ -83,7 +83,7 @@ public class App extends Application {
     private Scene createMainAppScene() {
         VBox root = new VBox(10);
         root.setPadding(new Insets(20));
-        root.setAlignment(Pos.TOP_CENTER);
+        root.setAlignment(Pos.CENTER);  // Center the content of this scene
 
         // Title Label
         Label titleLabel = new Label("Password Strength Analyzer and Manager");
@@ -102,6 +102,7 @@ public class App extends Application {
         viewHashedPasswordsButton.setOnAction(event -> {
             Stage stage = (Stage) viewHashedPasswordsButton.getScene().getWindow();
             stage.setScene(createMasterPasswordVerificationScene(stage)); // Verify master password first
+            stage.centerOnScreen();  // Center the window
         });
 
         VBox viewPasswordsSection = new VBox(5, viewHashedPasswordsButton);
@@ -115,7 +116,7 @@ public class App extends Application {
             viewPasswordsSection
         );
 
-        return new Scene(root, 600, 700);
+        return new Scene(root, 600, 600);
     }
 
     /** Creates the scene for verifying the master password before viewing hashed passwords */
@@ -124,7 +125,7 @@ public class App extends Application {
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.CENTER);
 
-        Label titleLabel = new Label("Enter Master Password to View Hashed Passwords");
+        Label titleLabel = new Label("Enter Master Password to Continue");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         PasswordField passwordField = new PasswordField();
@@ -163,7 +164,7 @@ public class App extends Application {
     private Scene createHashedPasswordsScene(Stage stage) {
         VBox root = new VBox(10);
         root.setPadding(new Insets(20));
-        root.setAlignment(Pos.TOP_CENTER);
+        root.setAlignment(Pos.CENTER);
 
         // Title Label
         Label titleLabel = new Label("View Hashed Passwords");
@@ -189,6 +190,8 @@ public class App extends Application {
 
         // Add components to the layout
         root.getChildren().addAll(titleLabel, tableView, backButton);
+
+        stage.centerOnScreen();
 
         return new Scene(root, 600, 400);
     }
@@ -259,8 +262,8 @@ public class App extends Application {
             }
 
             String strength = PasswordStrengthChecker.checkStrength(password);
-            if (!"Very Strong".equalsIgnoreCase(strength)) {
-                saveStatusLabel.setText("Password must be 'Very Strong' to save.");
+            if (!"Very Strong".equals(strength)) {
+                saveStatusLabel.setText("Password is too weak to save.");
                 return;
             }
 
@@ -273,38 +276,34 @@ public class App extends Application {
         });
 
         verifyPasswordButton.setOnAction(event -> {
-            String account = accountField.getText();
             String password = verifyPasswordField.getText();
-
-            if (account.isEmpty() || password.isEmpty()) {
-                verifyStatusLabel.setText("Account and password cannot be empty.");
+            if (password.isEmpty()) {
+                verifyStatusLabel.setText("Password field cannot be empty.");
                 return;
             }
 
             try {
-                boolean isValid = passwordManager.verifyAccountPassword(account, password);
-                verifyStatusLabel.setText(isValid ? "Password is valid!" : "Invalid password.");
+                if (passwordManager.verifyAccountPassword(accountField.getText(), password)) {
+                    verifyStatusLabel.setText("Password verified successfully!");
+                } else {
+                    verifyStatusLabel.setText("Incorrect password.");
+                }
             } catch (Exception e) {
-                // Handle the exception and provide feedback
                 verifyStatusLabel.setText("Error verifying password: " + e.getMessage());
             }
         });
 
-        return new VBox(5,
-            accountField, newPasswordField, savePasswordButton, saveStatusLabel,
-            new Label("Verify Password for an Account:"),
-            verifyPasswordField, verifyPasswordButton, verifyStatusLabel
-        );
+        return new VBox(5, accountField, newPasswordField, savePasswordButton, saveStatusLabel,
+            verifyPasswordField, verifyPasswordButton, verifyStatusLabel);
     }
 
-    /** Creates a reusable section with a label and content */
-    private VBox createLabeledSection(String title, VBox content) {
-        Label sectionLabel = new Label(title);
-        sectionLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-
-        VBox section = new VBox(5, sectionLabel, content);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: #ccc; -fx-border-width: 1; -fx-border-radius: 5;");
+    /** Creates a labeled section with a title and a VBox of controls */
+    private VBox createLabeledSection(String title, VBox controls) {
+        Label sectionTitle = new Label(title);
+        sectionTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        VBox section = new VBox(10);
+        section.getChildren().addAll(sectionTitle, controls);
+        section.setAlignment(Pos.CENTER);
         return section;
     }
 
